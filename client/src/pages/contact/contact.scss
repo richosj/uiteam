@@ -1,0 +1,69 @@
+// src/components/contact.scss
+.contact-card {
+    max-width: 480px;
+    margin: 60px auto;
+    padding: 40px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    color: #fff;
+    h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      font-size: 2rem;
+      letter-spacing: 2px;
+    }
+    .fields {
+      display: grid;
+      grid-template-columns: 1fr;
+      row-gap: 20px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      label { margin-bottom: 6px; font-weight: 500; }
+      input, textarea {
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        outline: none;
+      }
+      &.textarea textarea { min-height: 120px; resize: vertical; }
+      small {
+        color: #ff6b6b;
+        margin-top: 4px;
+        font-size: 0.8rem;
+      }
+      .count {
+        position: absolute;
+        bottom: 8px;
+        right: 12px;
+        font-size: 0.75rem;
+        color: #ccc;
+      }
+    }
+    .agree {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+      input { margin-right: 8px; }
+      font-size: 0.9rem;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(45deg, #e91e63, #3f51b5);
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: opacity .3s;
+      &:disabled { opacity: 0.6; cursor: not-allowed; }
+    }
+    background: linear-gradient(135deg, rgba(24,24,36,0.9), rgba(36,24,24,0.9));
+  }
+  

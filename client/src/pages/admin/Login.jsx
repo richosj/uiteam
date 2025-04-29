@@ -1,25 +1,29 @@
 // src/pages/admin/Login.jsx
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../contexts/AuthContext'
 
 const Login = () => {
-  console.log('Login 페이지 렌더됨')
-
-
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
+  const { login } = useAuth()
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
+    setError('')
+    setIsLoading(true)
 
-    // 임시 로그인 로직 (원래는 서버에 요청해야 함)
-    if (username === 'admin' && password === '1234') {
-      localStorage.setItem('token', 'admin-token') // 가짜 토큰 저장
-      navigate('/admin/internal-projects') // 로그인 성공 시 이동
-    } else {
-      setError('아이디 또는 비밀번호가 올바르지 않습니다.')
+    try {
+      await login({ username, password })
+      navigate('/admin')
+    } catch (err) {
+      console.error('로그인 에러:', err)
+      setError(err.message || '로그인에 실패했습니다.')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -36,6 +40,8 @@ const Login = () => {
           className="w-full mb-4 p-2 border border-gray-300 rounded"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          disabled={isLoading}
+          autoComplete="username"
         />
 
         <input
@@ -44,13 +50,16 @@ const Login = () => {
           className="w-full mb-6 p-2 border border-gray-300 rounded"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          disabled={isLoading}
+          autoComplete="current-password"
         />
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:bg-blue-400"
+          disabled={isLoading}
         >
-          로그인
+          {isLoading ? '로그인 중...' : '로그인'}
         </button>
       </form>
     </div>

@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-const ProjectDetail = () => {
+const ProjectDetailAdmin = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
+  const BASE_URL = import.meta.env.VITE_API_URL
+
+
 
   useEffect(() => {
-    fetch(`/api/public/projects/${id}`)
+    fetch(`/api/projects/${id}`)
       .then(res => res.json())
       .then(setData)
       .catch(err => {
@@ -27,41 +30,43 @@ const ProjectDetail = () => {
   } = data
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
-      <button onClick={() => navigate(-1)} className="text-sm text-gray-500 underline">← 목록으로</button>
+    <div className="p-6 space-y-4">
+      <button className="text-sm text-gray-500 underline" onClick={() => navigate(-1)}>← 돌아가기</button>
 
-      <h1 className="text-3xl font-bold">{title}</h1>
-      <p className="text-sm text-gray-500">{year} • {type} • {client}</p>
-      <p className="text-sm text-gray-400">{new Date(date).toLocaleDateString()}</p>
-      <p className="mt-4 whitespace-pre-wrap leading-relaxed text-gray-700">{description}</p>
+      <h1 className="text-2xl font-bold">{title}</h1>
+      <p><strong>연도:</strong> {year}</p>
+      <p><strong>타입:</strong> {type}</p>
+      <p><strong>클라이언트:</strong> {client}</p>
+      <p><strong>일자:</strong> {new Date(date).toLocaleDateString()}</p>
+      <p><strong>설명:</strong> {description}</p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         {thumbnail && (
           <div>
             <p className="text-sm font-medium mb-1">썸네일</p>
-            <img src={`http://localhost:4000/${thumbnail}`} alt="thumbnail" className="w-full rounded" />
+            <img src={`${BASE_URL}/${thumbnail}`} alt="thumbnail" className="w-full rounded" />
           </div>
         )}
         {background && (
           <div>
             <p className="text-sm font-medium mb-1">배경 이미지</p>
-            <img src={`http://localhost:4000/${background}`} alt="background" className="w-full rounded" />
+            <img src={`${BASE_URL}/${background}`} alt="background" className="w-full rounded" />
           </div>
         )}
         {title_image && (
           <div>
             <p className="text-sm font-medium mb-1">타이틀 이미지</p>
-            <img src={`http://localhost:4000/${title_image}`} alt="title" className="w-full rounded" />
+            <img src={`${BASE_URL}/${title_image}`} alt="title" className="w-full rounded" />
           </div>
         )}
       </div>
 
-      {detailImages?.length > 0 && (
+      {detailImages.length > 0 && (
         <div>
           <p className="text-sm font-medium mb-2">상세 이미지</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {detailImages.map((src, i) => (
-              <img key={i} src={`http://localhost:4000/${src}`} alt={`detail-${i}`} className="rounded" />
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {detailImages.map((src, idx) => (
+              <img key={idx} src={`${BASE_URL}/${src}`} alt={`detail-${idx}`} className="rounded" />
             ))}
           </div>
         </div>
@@ -70,4 +75,4 @@ const ProjectDetail = () => {
   )
 }
 
-export default ProjectDetail
+export default ProjectDetailAdmin

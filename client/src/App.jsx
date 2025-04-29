@@ -1,37 +1,35 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import AdminRoute from './components/AdminRoute'
-import Layout from './components/layout/Layout'
-import Login from './pages/admin/Login'
-import InternalProjectDetail from './pages/internalProject/InternalProjectDetail'
-import InternalProjectAdmin from './pages/internalProject/admin/InternalProjectAdmin'
-import ProjectDetail from './pages/project/ProjectDetail'
-import Projects from './pages/project/Projects'
-
-
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import ErrorBoundary from './components/ErrorBoundary';
+import { AuthProvider } from './contexts/AuthContext';
+import NotFound from './pages/NotFound';
+import { adminRoutes } from './routes/adminRoutes';
+import { publicRoutes } from './routes/publicRoutes';
 
 function App() {
   return (
-    <div className="min-h-screen bg-white">
-      <BrowserRouter>
-        <Routes>
-        <Route
-            path="/projects"
-            element={
-              <Layout>
-                <Projects />
-              </Layout>
-            }
-          />
-          <Route path="/projects/:id" element={<ProjectDetail />} />
-          <Route path="/internal-projects/:id" element={<InternalProjectDetail />} />
-          <Route path="/admin/login" element={<Login />} />
-          <Route path="/admin/internal-projects" element={
-            <AdminRoute><InternalProjectAdmin /></AdminRoute>
-          } />
-        </Routes>
-      </BrowserRouter>
-    </div>
-  )
+    <ErrorBoundary>
+      <AuthProvider>
+        <div className="min-h-screen bg-white">
+          <BrowserRouter>
+            <Routes>
+              {/* Public Routes */}
+              {publicRoutes.map((route) => (
+                <Route key={route.path} path={route.path} element={route.element} />
+              ))}
+              
+              {/* Admin Routes */}
+              {adminRoutes.map((route) => (
+                <Route key={route.path} path={route.path} element={route.element} />
+              ))}
+
+              {/* 404 Not Found */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </div>
+      </AuthProvider>
+    </ErrorBoundary>
+  );
 }
 
-export default App
+export default App;
